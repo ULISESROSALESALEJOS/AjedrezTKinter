@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import ImageTk, Image
-import chessController
+import AjedrezTKinter.chessController as chessController
 
 
 
