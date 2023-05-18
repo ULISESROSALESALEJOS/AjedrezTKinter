@@ -19,7 +19,7 @@ class App():
         
         
         self.ventana.title("Chess Legend")
-        self.ventana.iconbitmap("AjedrezTKinter/chess_icon.ico")
+        self.ventana.iconbitmap("chess_icon.ico")
         
         #PARA DEFINIR LA DIMENSIÓN DE LA VENTANA
         self.ventana.geometry(f"{str(L_CUADRADO * 8)}x{str(L_CUADRADO*8)}")
@@ -44,7 +44,7 @@ class App():
     def loadImg(self):
         piezas = ["np","nT","nC","nA","nD","nR","bp","bT","bC","bA","bD","bR"]
         for pieza in piezas:
-            self.imagenes[pieza] = tk.PhotoImage(file="AjedrezTKinter/img/"+ pieza + ".png")
+            self.imagenes[pieza] = tk.PhotoImage(file="./img/"+ pieza + ".png")
                     
     def showPiezas(self):
         #indice_i rescata la fila, i guardara la lista entera de esa fila
