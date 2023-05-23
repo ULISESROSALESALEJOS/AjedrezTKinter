@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import Button
-import chessController
+from chessController import gameState
 import tkinter.dnd as tkd
 
 PANTALLA = tk.Tk()
@@ -8,15 +8,17 @@ PANTALLA = tk.Tk()
 class App():
     def __init__(self,L_CUADRADO):
         #Aqui accedimos a la clase de la otra hoja
-        self.gs = chessController.gameState()
+        #self.gd = chessController.gameState()
+        self.gs = gameState()
+        #self.validarPieza = chessController.gameState.validarPieza(self.primeraJugada)
         
         self.L_CUADRADO = L_CUADRADO
         self.imagenes = {}
         
         self.ventana = PANTALLA
-        PANTALLA.bind("<Button-1>", self.coordenas)
-        self.otro_click = False
-        
+        PANTALLA.bind("<Button-1>", self.primeraJugada)
+        self.pieza = ''
+        #self.otro_click = False
         
         self.ventana.title("Chess Legend")
         self.ventana.iconbitmap("chess_icon.ico")
@@ -28,7 +30,6 @@ class App():
 
         self.interfaz = tk.Canvas(self.ventana)
         self.interfaz.pack(fill="both", expand=True)
-        
         
     def __call__(self):
         self.ventana.mainloop()
@@ -55,30 +56,30 @@ class App():
                     self.interfaz.create_image(indice_j*self.L_CUADRADO, indice_i*self.L_CUADRADO, image=self.imagenes[j], anchor="nw")
         pass
         
-    def coordenas(self,event):
-        # print("Coordenadas:","X:",event.x,"Y:", event.y)
-        # print(event.x)
+    def primeraJugada(self,event):
         fila = int(event.y / 60)
         columna = int(event.x /60)
         print("---------")
         print("Primer click: ","fila:", fila, ",","columna", columna)
         filaX = self.gs.piezas[fila]
-        pieza = filaX[columna]
-        print(pieza)
-        
-        if pieza == 'np' and self.otro_click==False:
-            self.ventana.wait_variable(self.ventana.bind("<Button-1>", self.segundoClick))
-            self.otro_click = True
-        elif self.otro_click != False:
-            self.coordenas(event)
+        self.pieza = filaX[columna]
+        if self.pieza == 'np':
+            self.ventana.wait_variable(self.ventana.bind("<Button-1>", self.segundaJugada))
             
-    def segundoClick(self, event):
+    def segundaJugada(self, event):
         fila = int(event.y / self.L_CUADRADO)
         columna = int(event.x / self.L_CUADRADO)
+        filaM = self.gs.piezas[fila]
+        #filaM[columna] = self.imagenes[self.pieza]
+        if self.pieza in self.imagenes:
+            filaM[columna] = self.interfaz.create_image(columna*self.L_CUADRADO, fila*self.L_CUADRADO, image=self.imagenes[self.pieza], anchor="nw")
+        else:
+            print("No esta")
         print("Segundo click: ","fila:", fila, ",","columna", columna)
         print("---------")
-        self.coordenas(event)
-
+        self.pieza = ''
+        self.primeraJugada(event)
+        
 runChess = App(60)
 runChess.dibujarTablero()
 runChess.loadImg()
